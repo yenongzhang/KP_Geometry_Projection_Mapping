@@ -460,7 +460,7 @@ GameObject:
   - component: {fileID: 352656940}
   - component: {fileID: 352656939}
   m_Layer: 0
-  m_Name: ButtonVolume
+  m_Name: Volume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -475,7 +475,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 352656938}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e8d8425c38500c4e90d50c0f5908880, type: 3}
+  m_Script: {fileID: 11500000, guid: e8a8c141394721e49abdfb9e075b7c30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!65 &352656940
@@ -1086,7 +1086,7 @@ GameObject:
   - component: {fileID: 1823681837}
   - component: {fileID: 1823681836}
   m_Layer: 0
-  m_Name: ButtonSurfaceArea
+  m_Name: Surface Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
