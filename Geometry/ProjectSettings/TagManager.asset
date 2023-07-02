@@ -6,8 +6,8 @@ TagManager:
   tags:
   - Geometry
   - Formula
-  - Cuboid
   - CuboidSurface
+  - HighlightLine
   layers:
   - Default
   - TransparentFX
