@@ -10,7 +10,13 @@ public class Switch : MonoBehaviour
     protected string labeltext;
     protected GameObject button;
     protected string geometryName;
-    protected string formula;
+    protected GameObject formula;
+    protected string formulaStringCopy;
+    protected string formulaName;
+    protected GameObject[] formulas;
+    private Coroutine colorChangeCoroutine;
+    protected Transform parentTransform;
+    List<GameObject> highlights = new List<GameObject>();
     // Start is called before the first frame update
     void Start()
     {
@@ -22,63 +28,119 @@ public class Switch : MonoBehaviour
         material = this.GetComponent<Renderer>().material;
         string[] name = button.name.Split(' ');
         geometryName = name[0];
-        Geometry = GameObject.Find(geometryName);
         labeltext = name[1];
-        AddLabel(button, labeltext);
+        Geometry = GameObject.Find(geometryName);
     }
 
     private void OnMouseEnter()
     {
-        //for(int i = 0; i < Geometries.Length; i++)
-        //{
-        //    Geometries[i].GetComponent<Renderer>().material = material;
-        //}
-        Geometry.GetComponent<Renderer>().material = material;
-        AddFormula();
+        //Geometry.GetComponent<Renderer>().material = material;
+        parentTransform = Geometry.transform;
+        formulas = GameObject.FindGameObjectsWithTag("Formula");
+        foreach (GameObject formula in formulas)
+        {
+            formula.SetActive(false);
+        }
+        switch (labeltext)
+        {
+            case "Volume":
+                formulaName = geometryName + " V";
+                break;
+            case "Area":
+                formulaName = geometryName + " SA";
+                break;
+        }
+        formula = FindChildGameObject(parentTransform, formulaName);
+        formula.SetActive(true);
+        if (colorChangeCoroutine != null)
+        {
+            StopCoroutine(colorChangeCoroutine);
+        }
+        colorChangeCoroutine = StartCoroutine(ChangeColorOverTime());
     }
-    private void AddLabel(GameObject parent, string text)
-    {
-        var label = new GameObject("Label");
-        TextMeshPro textRenderer = label.AddComponent<TextMeshPro>();
-        textRenderer.text = text;
-        textRenderer.color = Color.black;
 
-        label.transform.parent = parent.transform;
-        label.transform.localScale = new Vector3(0.06f, 0.06f, 0.06f);
-        label.transform.localPosition = new Vector3(0.8f, -0.5f, 0.32f);
-        label.transform.localRotation = Quaternion.Euler(90, -90, 0);
-    }
-
-    private void AddFormula()
+    IEnumerator ChangeColorOverTime()
     {
-        switch (Geometry.name)
+        yield return new WaitForSeconds(1f);
+        TextMeshPro formulaText = formula.GetComponent<TextMeshPro>();
+        string formulaString = formulaText.text;
+        formulaStringCopy = formulaString;
+        switch (geometryName)
         {
             case "Cube":
-                if(labeltext == "volume")
-                {
-                    formula = "V = s x s x s";
-                }
-                else if(labeltext == "surface")
-                {
-                    formula = "SA = 6 x a x a";
-                }
+                formulaString = formulaString.Replace("s", "<color=red>s</color>");
                 break;
             case "Cuboid":
-                if (labeltext == "volume")
+                if(labeltext == "Area")
                 {
-                    formula = "V = l x w x h";
+                    formulaString = formulaString.Replace("2LW", "<color=red>2LW</color>");
+                    formulaString = formulaString.Replace("2LH", "<color=green>2LH</color>");
+                    formulaString = formulaString.Replace("2WH", "<color=blue>2WH</color>");
+                    ShowHighlights("CuboidSurface");
                 }
-                else if (labeltext == "surface")
-                {
-                    formula = "SA = 2 x l x w + 2 x l x h + 2 x h x w";
-                }
+                formulaText.text = formulaString;
+                yield return new WaitForSeconds(2f);
+                HideHighLights();
+                formulaString = formulaStringCopy;
+                formulaString = formulaString.Replace("L", "<color=red>L</color>");
+                formulaString = formulaString.Replace("W", "<color=blue>W</color>");
+                formulaString = formulaString.Replace("H", "<color=green>H</color>");
+                
                 break;
             case "Pyramid":
                 break;
             case "Prism":
                 break;
         }
-        AddLabel(Geometry, formula);
+        ShowHighlights("HighlightLine");
+        formulaText.text = formulaString;
+        yield return new WaitForSeconds(3f);
+        formulaText.text = formulaStringCopy;
+        HideHighLights();
+    }
+    private void ShowHighlights(string tag)
+    {
+        for (int i = 0; i < parentTransform.childCount; i++)
+        {
+            Transform child = parentTransform.GetChild(i);
+            if (child.CompareTag(tag))
+            {
+                highlights.Add(child.gameObject);
+            }
+        }
+        foreach (GameObject line in highlights)
+        {
+            line.SetActive(true);
+        }
+    }
+    private void HideHighLights()
+    {
+        if (highlights.Count > 0)
+        {
+            foreach (GameObject line in highlights)
+            {
+                line.SetActive(false);
+            }
+        }
+        highlights.Clear();
+    }
+
+    GameObject FindChildGameObject(Transform parent, string name)
+    {
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            Transform child = parent.GetChild(i);
+            if (child.name == name)
+            {
+                return child.gameObject;
+            }
+            GameObject foundChild = FindChildGameObject(child, name);
+            if (foundChild != null)
+            {
+                return foundChild;
+            }
+        }
+        return null;
     }
 
     // Update is called once per frame
