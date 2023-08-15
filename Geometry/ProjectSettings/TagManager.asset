@@ -8,6 +8,8 @@ TagManager:
   - Formula
   - CuboidSurface
   - HighlightLine
+  - ObjectsWithTexture
+  - Button
   layers:
   - Default
   - TransparentFX

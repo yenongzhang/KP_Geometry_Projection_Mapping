@@ -34,6 +34,7 @@ public class Switch : MonoBehaviour
 
     private void OnMouseEnter()
     {
+        Debug.Log(geometryName);
         //Geometry.GetComponent<Renderer>().material = material;
         parentTransform = Geometry.transform;
         formulas = GameObject.FindGameObjectsWithTag("Formula");
