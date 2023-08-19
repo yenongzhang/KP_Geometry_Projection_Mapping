@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -19,6 +19,8 @@ public class Select : MonoBehaviour
     private (GameObject, Vector2)[] offsetArray;
     protected GameObject[] cal_buttons;
     private Color highlight = Color.cyan;
+    public Material[] materials;
+    private Vector3 gridSize = new Vector3(0.00014f, 0.00014f, 1e-07f);
     // Start is called before the first frame update
     void Start()
     {
@@ -54,7 +56,7 @@ public class Select : MonoBehaviour
     }
     void CubeAction()
     {
-        middle.transform.rotation = Quaternion.Euler(-90f, -45f, 0f);
+        middle.transform.rotation = Quaternion.Euler(-90f, 45f, 0f);
         ChangeOffset(middle, new Vector2(0f, 0.6666f));
         
         switch (cal_mode)
@@ -68,6 +70,26 @@ public class Select : MonoBehaviour
                     (geometry, new Vector2(0f, 0.6666f)),
                     (ground, new Vector2(0.6666f, 0.75f)),
                 };
+                int[] materialIndex = new int[6];
+                for (int i = 0; i < materialIndex.Length; i++)
+                {
+                    materialIndex[i] = 0;
+                }
+                Vector2Int[] gridCounts = new Vector2Int[6];
+                for(int i = 0; i < 6; i++)
+                {
+                    gridCounts[i] = new Vector2Int(10, 10);
+                }
+                Vector3[] startPos = {
+                    new Vector3(0.00063f, 0.00275f, 7e-06f),
+                    new Vector3(0.00204f, 0.00133f, 7e-06f),
+                    new Vector3(0.00063f, 0.00133f, 7e-06f),
+                    new Vector3(-0.00079f, 0.00133f, 7e-06f),
+                    new Vector3(0.00063f, -7.7e-05f, 7e-06f),
+                    new Vector3(0.00063f, -0.0015f, 7e-06f)
+                };
+                StartCoroutine(ShowGrids(startPos, gridCounts, materialIndex));
+                
                 break;
             case "Volume":
                 offsetArray = new (GameObject, Vector2)[]
@@ -92,7 +114,7 @@ public class Select : MonoBehaviour
     }
     void CuboidAction()
     {
-        middle.transform.rotation = Quaternion.Euler(-90f, 45f, 0f);
+        middle.transform.rotation = Quaternion.Euler(-90f, 135f, 0f);
         ChangeOffset(middle, new Vector2(0.5f, 0.6666f));
         switch (cal_mode)
         {
@@ -109,6 +131,24 @@ public class Select : MonoBehaviour
                     (geometry, new Vector2(0.6666f, 0.6666f)),
                     (ground, new Vector2(0.8f, 0.5f)),
                 };
+                int[] materialIndex = {0, 2, 1, 0, 1, 2};
+                Vector2Int[] gridCounts = {
+                    new Vector2Int(11, 9),
+                    new Vector2Int(11, 7),
+                    new Vector2Int(7, 9),
+                    new Vector2Int(11, 9),
+                    new Vector2Int(7, 9),
+                    new Vector2Int(11, 7),
+                };
+                Vector3[] startPos = {
+                    new Vector3(0.00071f, 0.00219f, 7e-06f),
+                    new Vector3(0.00071f, 0.00092f, 7e-06f),
+                    new Vector3(0.0017f, -7.4e-05f, 7e-06f),
+                    new Vector3(0.00071f, -7.4e-05f, 7e-06f),
+                    new Vector3(-0.00085f, -7.4e-05f, 7e-06f),
+                    new Vector3(0.00071f, -0.00135f, 7e-06f)
+                };
+                StartCoroutine(ShowGrids(startPos, gridCounts, materialIndex));
                 break;
             case "Volume":
                 offsetArray = new (GameObject, Vector2)[]
@@ -138,7 +178,7 @@ public class Select : MonoBehaviour
     }
     void PyramidAction()
     {
-        middle.transform.rotation = Quaternion.Euler(-90f, -45f, 0f);
+        middle.transform.rotation = Quaternion.Euler(-90f, 45f, 0f);
         ChangeOffset(middle, new Vector2(0.25f, 0.6666f));
         switch (cal_mode)
         {
@@ -153,6 +193,20 @@ public class Select : MonoBehaviour
                     (geometry, new Vector2(0.5f, 0.6666f)),
                     (ground, new Vector2(0.75f, 0.75f)),
                 };
+                int[] materialIndex = { 2, 0, 0, 1};
+                Vector2Int[] gridCounts = {
+                    new Vector2Int(5, 14),
+                    new Vector2Int(11, 10),
+                    new Vector2Int(10, 10),
+                    new Vector2Int(5, 10),
+                };
+                Vector3[] startPos = {
+                    new Vector3(0.0006f, 0.002325f, 7e-06f),
+                    new Vector3(0.00218f, 0.00028f, 7e-06f),
+                    new Vector3(0.000583f, 0.00028f, 7e-06f),
+                    new Vector3(0.000583f, -0.001134f, 7e-06f),
+                };
+                StartCoroutine(ShowGrids(startPos, gridCounts, materialIndex));
                 break;
             case "Volume":
                 offsetArray = new (GameObject, Vector2)[]
@@ -178,7 +232,7 @@ public class Select : MonoBehaviour
     }
     void PrismAction()
     {
-        middle.transform.rotation = Quaternion.Euler(-90f, -135f, 0f);
+        middle.transform.rotation = Quaternion.Euler(-90f, -45f, 0f);
         ChangeOffset(middle, new Vector2(0.75f, 0.6666f));
         switch (cal_mode)
         {
@@ -195,6 +249,20 @@ public class Select : MonoBehaviour
                     (geometry, new Vector2(0.6666f, 0.6666f)),
                     (ground, new Vector2(0.8f, 0.5f)),
                 };
+                int[] materialIndex = { 1, 2, 0, 2 };
+                Vector2Int[] gridCounts = {
+                    new Vector2Int(9, 7),
+                    new Vector2Int(8, 11),
+                    new Vector2Int(9, 11),
+                    new Vector2Int(8, 11),
+                };
+                Vector3[] startPos = {
+                    new Vector3(0.000565f, 0.0017f, 7e-06f),
+                    new Vector3(0.001743f, 0.000706f, 7e-06f),
+                    new Vector3(0.000565f, 0.000706f, 7e-06f),
+                    new Vector3(-0.000717f, 0.000706f, 7e-06f),
+                };
+                StartCoroutine(ShowGrids(startPos, gridCounts, materialIndex));
                 break;
             case "Volume":
                 offsetArray = new (GameObject, Vector2)[]
@@ -240,7 +308,8 @@ public class Select : MonoBehaviour
     }
     void ResetMaterials()
     {
-        foreach(GameObject obj in Objects)
+        DeleteAllGrids();
+        foreach (GameObject obj in Objects)
         {
             Debug.Log(obj);
             if(obj.name == "cuboid Ground" || obj.name == "prism Ground")
@@ -270,6 +339,55 @@ public class Select : MonoBehaviour
                     //button.GetComponent<Renderer>().material.color = Color.magenta;
                     break;
             }
+        }
+    }
+    IEnumerator ShowGrids(Vector3[] startPos, Vector2Int[] gridCounts, int[] materialIndex)
+    {
+        Quaternion middleRotation = middle.transform.rotation;
+        //middleRotation.x = 45f;
+        //Quaternion gridRotation = Quaternion.Euler(middleRotation.eulerAngles.x, 0f, 0f);
+        for(int i= 0; i<startPos.Length; i++)
+        {
+            for (int y = 0; y < gridCounts[i].y; y++)
+            {
+                for (int x = 0; x < gridCounts[i].x; x++)
+                {
+                    Vector3 gridPosition = new Vector3(startPos[i].x - x * gridSize.x, startPos[i].y - y * gridSize.y, startPos[i].z);
+                    //GameObject newGrid = Instantiate(gridPrefab, gridPosition, gridRotation, middle.transform);
+                    GameObject newGrid = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    newGrid.transform.parent = middle.transform;
+                    newGrid.transform.localPosition = gridPosition;
+                    newGrid.transform.localScale = gridSize;
+                    newGrid.transform.rotation = middleRotation;
+                    newGrid.GetComponent<Renderer>().material = materials[materialIndex[i]];
+                    newGrid.SetActive(false);
+                    if(i == 0) { 
+                        yield return new WaitForSeconds(0.05f);
+                    }
+                    else
+                    {
+                        yield return new WaitForSeconds(0.01f);
+                    }
+                        
+                    newGrid.SetActive(true);
+
+                }
+            }
+            yield return new WaitForSeconds(1f);
+        }
+    }
+    void DeleteAllGrids()
+    {
+        GameObject[] grids = new GameObject[middle.transform.childCount];
+        for (int i = 0; i < middle.transform.childCount; i++)
+        {
+            grids[i] = middle.transform.GetChild(i).gameObject;
+        }
+
+        // 销毁所有 grids
+        foreach (GameObject grid in grids)
+        {
+            Destroy(grid);
         }
     }
     // Update is called once per frame
