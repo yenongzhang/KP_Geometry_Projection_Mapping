@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -21,6 +22,8 @@ public class Select : MonoBehaviour
     private Color highlight = Color.cyan;
     public Material[] materials;
     private Vector3 gridSize = new Vector3(0.00014f, 0.00014f, 1e-07f);
+    private GameObject textObj;
+    private TextMeshPro text;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +31,8 @@ public class Select : MonoBehaviour
         cal_mode = this.gameObject.name.Split(" ")[1];
         geometry = GameObject.Find(geometryName);
         middle = GameObject.Find("middle");
+        textObj = GameObject.Find("Text");
+        text = textObj.GetComponent<TextMeshPro>();
         string groundName = geometryName + " Ground";
         ground = GameObject.Find(groundName);
         Objects = GameObject.FindGameObjectsWithTag("ObjectsWithTexture");
@@ -58,6 +63,8 @@ public class Select : MonoBehaviour
     {
         middle.transform.rotation = Quaternion.Euler(-90f, 45f, 0f);
         ChangeOffset(middle, new Vector2(0f, 0.6666f));
+        textObj.transform.rotation = Quaternion.Euler(90f, 0f, 135f);
+        textObj.transform.position = new Vector3(-0.225f, 0.003f, -0.01f);
         
         switch (cal_mode)
         {
@@ -116,6 +123,8 @@ public class Select : MonoBehaviour
     {
         middle.transform.rotation = Quaternion.Euler(-90f, 135f, 0f);
         ChangeOffset(middle, new Vector2(0.5f, 0.6666f));
+        textObj.transform.rotation = Quaternion.Euler(90f, 0f, 225f);
+        textObj.transform.position = new Vector3(0.218f, 0.003f, -0.027f);
         switch (cal_mode)
         {
             case "Area":
@@ -180,6 +189,8 @@ public class Select : MonoBehaviour
     {
         middle.transform.rotation = Quaternion.Euler(-90f, 45f, 0f);
         ChangeOffset(middle, new Vector2(0.25f, 0.6666f));
+        textObj.transform.rotation = Quaternion.Euler(90f, 0f, 45f);
+        textObj.transform.position = new Vector3(-0.22f, 0.003f, 0.025f);
         switch (cal_mode)
         {
             case "Area":
@@ -234,6 +245,8 @@ public class Select : MonoBehaviour
     {
         middle.transform.rotation = Quaternion.Euler(-90f, -45f, 0f);
         ChangeOffset(middle, new Vector2(0.75f, 0.6666f));
+        textObj.transform.rotation = Quaternion.Euler(90f, 0f, 315f);
+        textObj.transform.position = new Vector3(0.207f, 0.003f, 0.031f);
         switch (cal_mode)
         {
             case "Area":
@@ -347,6 +360,7 @@ public class Select : MonoBehaviour
         Quaternion middleRotation = middle.transform.rotation;
         //middleRotation.x = 45f;
         //Quaternion gridRotation = Quaternion.Euler(middleRotation.eulerAngles.x, 0f, 0f);
+        int squareCount = 0;
         for(int i= 0; i<startPos.Length; i++)
         {
             for (int y = 0; y < gridCounts[i].y; y++)
@@ -371,7 +385,8 @@ public class Select : MonoBehaviour
                     }
                         
                     newGrid.SetActive(true);
-
+                    squareCount++;
+                    text.text = "Squares: " + squareCount;
                 }
             }
             yield return new WaitForSeconds(1f);
@@ -379,6 +394,7 @@ public class Select : MonoBehaviour
     }
     void DeleteAllGrids()
     {
+        text.text = "";
         GameObject[] grids = new GameObject[middle.transform.childCount];
         for (int i = 0; i < middle.transform.childCount; i++)
         {
