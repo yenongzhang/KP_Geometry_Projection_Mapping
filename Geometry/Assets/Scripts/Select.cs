@@ -121,15 +121,15 @@ public class Select : MonoBehaviour
             case "Area":
                 offsetArray = new (GameObject, Vector2)[]
                 {
-                    (ground, new Vector2(0f, 0f)),
-                    (ground, new Vector2(0f, 0.5f)),
-                    (ground, new Vector2(0.2f, 0.5f)),
+                    (ground, new Vector2(-0.0006f, 0f)),
+                    (ground, new Vector2(-0.0006f, 0.5f)),
+                    (ground, new Vector2(0.1984f, 0.5f)),
                     (geometry, new Vector2(0f, 0.6666f)),
-                    (ground, new Vector2(0.4f, 0.5f)),
+                    (ground, new Vector2(0.3974f, 0.5f)),
                     (geometry, new Vector2(0.3333f, 0.6666f)),
-                    (ground, new Vector2(0.6f, 0.5f)),
+                    (ground, new Vector2(0.5966f, 0.5f)),
                     (geometry, new Vector2(0.6666f, 0.6666f)),
-                    (ground, new Vector2(0.8f, 0.5f)),
+                    (ground, new Vector2(0.7957f, 0.5f)),
                 };
                 int[] materialIndex = {0, 2, 1, 0, 1, 2};
                 Vector2Int[] gridCounts = {
@@ -153,15 +153,15 @@ public class Select : MonoBehaviour
             case "Volume":
                 offsetArray = new (GameObject, Vector2)[]
                 {
-                    (ground, new Vector2(0f, 0f)),
-                    (ground, new Vector2(0f, 0.25f)),
-                    (ground, new Vector2(0.2f, 0.25f)),
+                    (ground, new Vector2(-0.0006f, 0f)),
+                    (ground, new Vector2(-0.0006f, 0.25f)),
+                    (ground, new Vector2(0.1984f, 0.25f)),
                     (geometry, new Vector2(0f, 0.3333f)),
-                    (ground, new Vector2(0.4f, 0.25f)),
+                    (ground, new Vector2(0.3974f, 0.25f)),
                     (geometry, new Vector2(0.3333f, 0.3333f)),
-                    (ground, new Vector2(0.6f, 0.25f)),
+                    (ground, new Vector2(0.5966f, 0.25f)),
                     (geometry, new Vector2(0.6666f, 0.3333f)),
-                    (ground, new Vector2(0.8f, 0.25f)),
+                    (ground, new Vector2(0.7957f, 0.25f)),
                 };
                 break;
             case "Formula":
@@ -309,6 +309,7 @@ public class Select : MonoBehaviour
     void ResetMaterials()
     {
         DeleteAllGrids();
+        
         foreach (GameObject obj in Objects)
         {
             Debug.Log(obj);
