@@ -15,6 +15,7 @@ public class Select : MonoBehaviour
     protected GameObject ground;
     protected GameObject[] Objects;
     private Coroutine textureChangeCoroutine;
+    private Coroutine gridCoroutine;
     private const float WaitTime = 1f;
     private Dictionary<string, Action> geometryActions;
     private (GameObject, Vector2)[] offsetArray;
@@ -95,7 +96,7 @@ public class Select : MonoBehaviour
                     new Vector3(0.00063f, -7.7e-05f, 7e-06f),
                     new Vector3(0.00063f, -0.0015f, 7e-06f)
                 };
-                StartCoroutine(ShowGrids(startPos, gridCounts, materialIndex));
+                gridCoroutine = StartCoroutine(ShowGrids(startPos, gridCounts, materialIndex));
                 
                 break;
             case "Volume":
@@ -157,7 +158,7 @@ public class Select : MonoBehaviour
                     new Vector3(-0.00085f, -7.4e-05f, 7e-06f),
                     new Vector3(0.00071f, -0.00135f, 7e-06f)
                 };
-                StartCoroutine(ShowGrids(startPos, gridCounts, materialIndex));
+                gridCoroutine = StartCoroutine(ShowGrids(startPos, gridCounts, materialIndex));
                 break;
             case "Volume":
                 offsetArray = new (GameObject, Vector2)[]
@@ -217,7 +218,7 @@ public class Select : MonoBehaviour
                     new Vector3(0.000583f, 0.00028f, 7e-06f),
                     new Vector3(0.000583f, -0.001134f, 7e-06f),
                 };
-                StartCoroutine(ShowGrids(startPos, gridCounts, materialIndex));
+                gridCoroutine = StartCoroutine(ShowGrids(startPos, gridCounts, materialIndex));
                 break;
             case "Volume":
                 offsetArray = new (GameObject, Vector2)[]
@@ -275,7 +276,7 @@ public class Select : MonoBehaviour
                     new Vector3(0.000565f, 0.000706f, 7e-06f),
                     new Vector3(-0.000717f, 0.000706f, 7e-06f),
                 };
-                StartCoroutine(ShowGrids(startPos, gridCounts, materialIndex));
+                gridCoroutine = StartCoroutine(ShowGrids(startPos, gridCounts, materialIndex));
                 break;
             case "Volume":
                 offsetArray = new (GameObject, Vector2)[]
@@ -322,7 +323,10 @@ public class Select : MonoBehaviour
     void ResetMaterials()
     {
         DeleteAllGrids();
-        
+        if (gridCoroutine != null)
+        {
+            StopCoroutine(gridCoroutine);
+        }
         foreach (GameObject obj in Objects)
         {
             Debug.Log(obj);
