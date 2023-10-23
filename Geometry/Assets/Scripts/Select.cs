@@ -60,6 +60,23 @@ public class Select : MonoBehaviour
         }
         textureChangeCoroutine = StartCoroutine(PerformAction());
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log(other.gameObject.name + " entered the trigger area " + this.gameObject.name);
+
+        ResetMaterials();
+        this.GetComponent<Renderer>().material.color = highlight;
+        if (geometryActions.TryGetValue(geometryName, out Action action))
+        {
+            action.Invoke();
+        }
+        if (textureChangeCoroutine != null)
+        {
+            StopCoroutine(textureChangeCoroutine);
+        }
+        textureChangeCoroutine = StartCoroutine(PerformAction());
+    }
     void CubeAction()
     {
         middle.transform.rotation = Quaternion.Euler(-90f, 45f, 0f);
