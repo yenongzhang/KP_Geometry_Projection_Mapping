@@ -25,6 +25,7 @@ public class Select : MonoBehaviour
     private Vector3 gridSize = new Vector3(0.00014f, 0.00014f, 1e-07f);
     private GameObject textObj;
     private TextMeshPro text;
+    private GameObject grid;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,6 +35,7 @@ public class Select : MonoBehaviour
         middle = GameObject.Find("middle");
         textObj = GameObject.Find("Text");
         text = textObj.GetComponent<TextMeshPro>();
+        grid = GameObject.Find("grid");
         string groundName = geometryName + " Ground";
         ground = GameObject.Find(groundName);
         Objects = GameObject.FindGameObjectsWithTag("ObjectsWithTexture");
@@ -80,6 +82,7 @@ public class Select : MonoBehaviour
     void CubeAction()
     {
         middle.transform.rotation = Quaternion.Euler(-90f, 45f, 0f);
+        grid.transform.rotation = Quaternion.Euler(-90f, 90f, 45f);
         ChangeOffset(middle, new Vector2(0f, 0.6666f));
         textObj.transform.rotation = Quaternion.Euler(90f, 0f, 135f);
         textObj.transform.position = new Vector3(-0.225f, 0.003f, -0.01f);
@@ -140,6 +143,7 @@ public class Select : MonoBehaviour
     void CuboidAction()
     {
         middle.transform.rotation = Quaternion.Euler(-90f, 135f, 0f);
+        grid.transform.rotation = Quaternion.Euler(-90f, 0f, 45f);
         ChangeOffset(middle, new Vector2(0.5f, 0.6666f));
         textObj.transform.rotation = Quaternion.Euler(90f, 0f, 225f);
         textObj.transform.position = new Vector3(0.218f, 0.003f, -0.027f);
@@ -206,6 +210,7 @@ public class Select : MonoBehaviour
     void PyramidAction()
     {
         middle.transform.rotation = Quaternion.Euler(-90f, 45f, 0f);
+        grid.transform.rotation = Quaternion.Euler(-90f, 180f, 45f);
         ChangeOffset(middle, new Vector2(0.25f, 0.6666f));
         textObj.transform.rotation = Quaternion.Euler(90f, 0f, 45f);
         textObj.transform.position = new Vector3(-0.22f, 0.003f, 0.025f);
@@ -262,6 +267,7 @@ public class Select : MonoBehaviour
     void PrismAction()
     {
         middle.transform.rotation = Quaternion.Euler(-90f, -45f, 0f);
+        grid.transform.rotation = Quaternion.Euler(-90f, -90f, 45f);
         ChangeOffset(middle, new Vector2(0.75f, 0.6666f));
         textObj.transform.rotation = Quaternion.Euler(90f, 0f, 315f);
         textObj.transform.position = new Vector3(0.207f, 0.003f, 0.031f);
@@ -321,8 +327,7 @@ public class Select : MonoBehaviour
         
     }
     IEnumerator PerformAction()
-    {
-        
+    { 
         foreach((GameObject obj, Vector2 offset) in offsetArray)
         {
             if(this.GetComponent<Renderer>().material.color == highlight)
@@ -340,6 +345,8 @@ public class Select : MonoBehaviour
     void ResetMaterials()
     {
         DeleteAllGrids();
+        grid.GetComponent<Renderer>().enabled = false;
+        grid.transform.Find("text").gameObject.SetActive(false);
         if (gridCoroutine != null)
         {
             StopCoroutine(gridCoroutine);
@@ -382,7 +389,10 @@ public class Select : MonoBehaviour
         //middleRotation.x = 45f;
         //Quaternion gridRotation = Quaternion.Euler(middleRotation.eulerAngles.x, 0f, 0f);
         int squareCount = 0;
-        for(int i= 0; i<startPos.Length; i++)
+        grid.GetComponent<Renderer>().enabled = true;
+        grid.transform.Find("text").gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        for (int i= 0; i<startPos.Length; i++)
         {
             for (int y = 0; y < gridCounts[i].y; y++)
             {
